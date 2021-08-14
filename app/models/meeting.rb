@@ -3,6 +3,19 @@ class Meeting < ApplicationRecord
   validate :prevent_multiple_days_meeting
   validate :prevent_meeting_conflict
 
+  ACTIVE_STATUS = 'active'
+  CANCEL_STATUS = 'cancel'
+
+  before_create do
+    self.status = Meeting::ACTIVE_STATUS
+  end
+
+  before_update do
+    unless self.cancel_reason&.empty?
+      self.status = Meeting::CANCEL_STATUS
+    end
+  end
+
   private
   def end_time_great_than_start_time
     if start_time >= end_time

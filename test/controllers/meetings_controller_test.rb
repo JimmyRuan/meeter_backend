@@ -15,25 +15,6 @@ class MeetingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should update meet" do
-    patch meeting_url(@meeting), params: { meeting: {
-      calendar_id: @meeting.calendar_id,
-      start_time: @meeting.start_time,
-      end_time: @meeting.end_time,
-      status: @meeting.status,
-      title: @meeting.title
-    } }, as: :json
-    assert_response 200
-  end
-
-  test "should destroy meet" do
-    assert_difference('Meeting.count', -1) do
-      delete meeting_url(@meeting), as: :json
-    end
-
-    assert_response 204
-  end
-
   test "should create meet" do
     Meeting.destroy_all
     assert_difference('Meeting.count') do
@@ -91,6 +72,19 @@ class MeetingsControllerTest < ActionDispatch::IntegrationTest
       attendees_number: @meeting.attendees_number
     } }, as: :json
     assert_response 422
+  end
+
+  test "canceling a meeting with a provided reason" do
+    @meeting.save
+    cancel_reason = 'I am having lunch now'
+    patch cancel_meeting_url(:id=>@meeting.id), params: { meeting: {
+      :cancel_reason => cancel_reason
+    }}
+
+    updated_meeting = Meeting.find(@meeting.id)
+    assert_response 201
+    assert_equal(cancel_reason, updated_meeting.cancel_reason)
+    assert_equal(Meeting::CANCEL_STATUS, updated_meeting.status)
   end
 
 end

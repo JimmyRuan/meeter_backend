@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(version: 2021_08_14_182040) do
     t.datetime "start_time", null: false
     t.datetime "end_time", null: false
     t.integer "attendees_number", null: false
+    t.text "agenda"
+    t.text "cancel_reason"
     t.string "status", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

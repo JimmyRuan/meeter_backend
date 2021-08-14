@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  resources :meetings
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :meetings, only: [:index, :create, :show]
+  patch 'meetings/:id', to: 'meetings#cancel', as: 'cancel_meeting'
 end

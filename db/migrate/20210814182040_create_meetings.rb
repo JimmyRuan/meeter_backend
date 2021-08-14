@@ -6,9 +6,9 @@ class CreateMeetings < ActiveRecord::Migration[6.1]
       t.datetime :start_time, null: false
       t.datetime :end_time, null: false
       t.integer :attendees_number, null: false
-
+      t.text :agenda
+      t.text :cancel_reason
       t.string :status, null: false
-
       t.timestamps
     end
   end

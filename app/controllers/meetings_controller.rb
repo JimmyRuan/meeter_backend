@@ -1,24 +1,18 @@
 class MeetingsController < ApplicationController
-  before_action :set_meeting, only: [:show, :update, :destroy]
+  before_action :set_meeting, only: [:show, :cancel]
 
-  # GET /meetings
   def index
     @meetings = Meeting.all
 
     render json: @meetings
   end
 
-  # GET /meetings/1
   def show
     render json: @meeting
   end
 
-  # POST /meetings
   def create
     @meeting = Meeting.new(meeting_params)
-
-    # byebug
-
     if @meeting.save
       render json: @meeting, status: :created, location: @meeting
     else
@@ -26,18 +20,13 @@ class MeetingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /meetings/1
-  def update
-    if @meeting.update(meeting_params)
-      render json: @meeting
+  def cancel
+    @meeting.cancel_reason = meeting_cancel_params
+    if @meeting.save
+      render json: @meeting, status: :created, location: @meeting
     else
       render json: @meeting.errors, status: :unprocessable_entity
     end
-  end
-
-  # DELETE /meetings/1
-  def destroy
-    @meeting.destroy
   end
 
   private
@@ -48,6 +37,18 @@ class MeetingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def meeting_params
-      params.require(:meeting).permit(:calendar_id, :start_time, :end_time, :status, :title, :attendees_number)
+      params.require(:meeting).permit(
+        :calendar_id,
+        :start_time,
+        :end_time,
+        # :status,
+        :title,
+        :attendees_number,
+        :agenda
+      )
     end
+
+  def meeting_cancel_params
+    params.require(:meeting).require(:cancel_reason)
+  end
 end
