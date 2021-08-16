@@ -5,8 +5,16 @@ class MeetingsControllerTest < ActionDispatch::IntegrationTest
     @meeting = meetings(:one)
   end
 
-  test "should get index" do
+  test "should get a list of meetings ordered by meeting start time" do
+    meetings(:one).save
+    meetings(:two).save
     get meetings_url, as: :json
+
+    json_response = JSON.parse(response.body)
+    first_date_time = DateTime.parse(json_response[0]['start_time'])
+    second_date_time = DateTime.parse(json_response[1]['start_time'])
+
+    assert(first_date_time > second_date_time)
     assert_response :success
   end
 
