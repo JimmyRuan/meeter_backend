@@ -2,7 +2,7 @@ class MeetingsController < ApplicationController
   before_action :set_meeting, only: [:show, :cancel]
 
   def index
-    @meetings = Meeting.order(start_time: :desc).all
+    @meetings = Meeting.order(start_time: :desc).where(:calendar_id => 1)
 
     render json: @meetings
   end
@@ -41,7 +41,6 @@ class MeetingsController < ApplicationController
         :calendar_id,
         :start_time,
         :end_time,
-        # :status,
         :title,
         :attendees_number,
         :agenda

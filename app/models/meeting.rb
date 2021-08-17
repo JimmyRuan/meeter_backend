@@ -4,7 +4,7 @@ class Meeting < ApplicationRecord
   validate :prevent_meeting_conflict
 
   ACTIVE_STATUS = 'active'
-  CANCEL_STATUS = 'cancel'
+  CANCEL_STATUS = 'cancelled'
 
   before_create do
     self.status = Meeting::ACTIVE_STATUS
